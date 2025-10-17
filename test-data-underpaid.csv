@@ -1,0 +1,7 @@
+firstName,lastName,email,company,position,salary
+Jan,Kowalski,jan.kowalski@example.com,TechCorp,PROGRAMISTA,7500
+Anna,Nowak,anna.nowak@example.com,DataSoft,MANAGER,11000
+Piotr,Wiśniewski,piotr.wisniewski@example.com,CloudInc,STAZYSTA,2500
+Katarzyna,Dąbrowska,katarzyna.dabrowska@example.com,TechCorp,WICEPREZES,16000
+Tomasz,Lewandowski,tomasz.lewandowski@example.com,DataSoft,PREZES,24000
+Magdalena,Wójcik,magdalena.wojcik@example.com,CloudInc,PROGRAMISTA,9000

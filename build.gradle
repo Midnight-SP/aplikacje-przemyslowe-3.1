@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.techcorp'
+version = '1.0.0-SNAPSHOT'
+description = 'Prosty system zarządzania pracownikami dla TechCorp'
+
+application {
+    mainClass = 'com.techcorp.Main'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Dodatkowe zadanie do uruchamiania demo analitycznego
+tasks.register('runAnalyticsDemo', JavaExec) {
+    group = 'application'
+    description = 'Uruchamia demo metod analitycznych'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.techcorp.AnalyticsDemo'
+}
