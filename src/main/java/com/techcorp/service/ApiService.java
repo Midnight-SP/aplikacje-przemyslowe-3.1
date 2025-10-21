@@ -26,6 +26,14 @@ public class ApiService {
         this.gson = new Gson();
     }
     
+    /**
+     * Konstruktor dla testów - umożliwia wstrzyknięcie mockowanego HttpClient
+     */
+    public ApiService(HttpClient httpClient) {
+        this.httpClient = httpClient;
+        this.gson = new Gson();
+    }
+    
     public List<Employee> fetchEmployeesFromApi(String apiUrl) throws ApiException {
     try {
             HttpRequest request = HttpRequest.newBuilder()
