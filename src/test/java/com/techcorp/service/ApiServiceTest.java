@@ -21,10 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-/**
- * Testy jednostkowe dla klasy ApiService z użyciem mocków.
- * Testują komunikację z API bez wykonywania prawdziwych żądań HTTP.
- */
 @ExtendWith(MockitoExtension.class)
 class ApiServiceTest {
     
@@ -36,9 +32,6 @@ class ApiServiceTest {
     
     private ApiService apiService;
     
-    /**
-     * Przykładowa poprawna odpowiedź JSON z API
-     */
     private static final String VALID_JSON_RESPONSE = """
             [
                 {
@@ -60,15 +53,9 @@ class ApiServiceTest {
     
     @BeforeEach
     void setUp() {
-        // Tworzymy ApiService który będzie używał mockowanego HttpClient
-        // Nie możemy wstrzyknąć mocka bezpośrednio, więc użyjemy refleksji
-        // lub stworzymy konstruktor w ApiService przyjmujący HttpClient
         apiService = new ApiService();
     }
     
-    /**
-     * Test 1a: Poprawna odpowiedź - lista nie null
-     */
     @Test
     @DisplayName("Powinien zwrócić niepustą listę gdy API zwraca poprawny JSON")
     void shouldReturnNonNullList_whenValidResponse() throws Exception {
@@ -87,9 +74,6 @@ class ApiServiceTest {
         assertNotNull(employees);
     }
     
-    /**
-     * Test 1b: Poprawna odpowiedź - liczba pracowników
-     */
     @Test
     @DisplayName("Powinien zwrócić właściwą liczbę pracowników")
     void shouldReturnCorrectCount_whenValidResponse() throws Exception {
@@ -108,9 +92,6 @@ class ApiServiceTest {
         assertEquals(2, employees.size());
     }
     
-    /**
-     * Test 1c: Poprawna odpowiedź - imię pierwszego pracownika
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować imię pierwszego pracownika")
     void shouldParseFirstEmployeeName_whenValidResponse() throws Exception {
@@ -130,9 +111,6 @@ class ApiServiceTest {
         assertEquals("Jan Kowalski", first.getFullName());
     }
     
-    /**
-     * Test 1d: Poprawna odpowiedź - email pierwszego pracownika
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować email pierwszego pracownika")
     void shouldParseFirstEmployeeEmail_whenValidResponse() throws Exception {
@@ -152,9 +130,6 @@ class ApiServiceTest {
         assertEquals("jan@test.com", first.getEmail());
     }
     
-    /**
-     * Test 1e: Poprawna odpowiedź - firma pierwszego pracownika
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować firmę pierwszego pracownika")
     void shouldParseFirstEmployeeCompany_whenValidResponse() throws Exception {
@@ -174,9 +149,6 @@ class ApiServiceTest {
         assertEquals("TechCorp", first.getCompanyName());
     }
     
-    /**
-     * Test 1f: Poprawna odpowiedź - pozycja pierwszego pracownika
-     */
     @Test
     @DisplayName("Powinien ustawić domyślną pozycję dla pierwszego pracownika")
     void shouldSetDefaultPosition_whenValidResponse() throws Exception {
@@ -196,9 +168,6 @@ class ApiServiceTest {
         assertEquals(Position.PROGRAMISTA, first.getPosition());
     }
     
-    /**
-     * Test 1g: Poprawna odpowiedź - pensja pierwszego pracownika
-     */
     @Test
     @DisplayName("Powinien ustawić domyślną pensję dla pierwszego pracownika")
     void shouldSetDefaultSalary_whenValidResponse() throws Exception {
@@ -218,9 +187,6 @@ class ApiServiceTest {
         assertEquals(8000.0, first.getSalary());
     }
     
-    /**
-     * Test 1h: Poprawna odpowiedź - drugi pracownik
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować imię drugiego pracownika")
     void shouldParseSecondEmployeeName_whenValidResponse() throws Exception {
@@ -240,9 +206,6 @@ class ApiServiceTest {
         assertEquals("Anna Nowak", second.getFullName());
     }
     
-    /**
-     * Test 1i: Poprawna odpowiedź - email drugiego pracownika
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować email drugiego pracownika")
     void shouldParseSecondEmployeeEmail_whenValidResponse() throws Exception {
@@ -262,9 +225,6 @@ class ApiServiceTest {
         assertEquals("anna@test.com", second.getEmail());
     }
     
-    /**
-     * Test 1j: Poprawna odpowiedź - firma drugiego pracownika
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować firmę drugiego pracownika")
     void shouldParseSecondEmployeeCompany_whenValidResponse() throws Exception {
@@ -284,9 +244,6 @@ class ApiServiceTest {
         assertEquals("DataSoft", second.getCompanyName());
     }
     
-    /**
-     * Test 1k: Poprawna odpowiedź - weryfikacja wywołania HttpClient
-     */
     @Test
     @DisplayName("Powinien wywołać HttpClient dokładnie raz")
     void shouldCallHttpClientOnce_whenValidResponse() throws Exception {
@@ -305,9 +262,6 @@ class ApiServiceTest {
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
     }
     
-    /**
-     * Test 2a: Błąd HTTP 404 - rzucenie wyjątku
-     */
     @Test
     @DisplayName("Powinien rzucić ApiException gdy otrzyma błąd 404")
     void shouldThrowException_when404() throws Exception {
@@ -326,9 +280,6 @@ class ApiServiceTest {
         );
     }
     
-    /**
-     * Test 2b: Błąd HTTP 404 - treść komunikatu
-     */
     @Test
     @DisplayName("Wyjątek powinien zawierać kod 404 w komunikacie")
     void shouldContain404InMessage_whenError404() throws Exception {
@@ -350,9 +301,6 @@ class ApiServiceTest {
         assertTrue(exception.getMessage().contains("404"));
     }
     
-    /**
-     * Test 2c: Błąd HTTP 404 - weryfikacja wywołania
-     */
     @Test
     @DisplayName("Powinien wywołać HttpClient raz mimo błędu 404")
     void shouldCallHttpClientOnce_when404() throws Exception {
@@ -375,9 +323,6 @@ class ApiServiceTest {
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
     }
     
-    /**
-     * Test 3a: Błąd HTTP 500 - rzucenie wyjątku
-     */
     @Test
     @DisplayName("Powinien rzucić ApiException gdy otrzyma błąd 500")
     void shouldThrowException_when500() throws Exception {
@@ -396,9 +341,6 @@ class ApiServiceTest {
         );
     }
     
-    /**
-     * Test 3b: Błąd HTTP 500 - treść komunikatu
-     */
     @Test
     @DisplayName("Wyjątek powinien zawierać kod 500 w komunikacie")
     void shouldContain500InMessage_whenError500() throws Exception {
@@ -420,9 +362,6 @@ class ApiServiceTest {
         assertTrue(exception.getMessage().contains("500"));
     }
     
-    /**
-     * Test 3c: Błąd HTTP 500 - weryfikacja wywołania
-     */
     @Test
     @DisplayName("Powinien wywołać HttpClient raz mimo błędu 500")
     void shouldCallHttpClientOnce_when500() throws Exception {
@@ -445,9 +384,6 @@ class ApiServiceTest {
         verify(httpClient, times(1)).send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class));
     }
     
-    /**
-     * Test 4: IOException podczas komunikacji
-     */
     @Test
     @DisplayName("Powinien rzucić ApiException gdy wystąpi IOException")
     void shouldThrowException_whenIOException() throws Exception {
@@ -468,9 +404,6 @@ class ApiServiceTest {
         assertTrue(exception.getCause() instanceof IOException);
     }
     
-    /**
-     * Test 5: InterruptedException podczas komunikacji
-     */
     @Test
     @DisplayName("Powinien rzucić ApiException gdy wątek zostanie przerwany")
     void shouldThrowException_whenInterrupted() throws Exception {
@@ -491,9 +424,6 @@ class ApiServiceTest {
         // W prawdziwej implementacji wątek powinien mieć ustawioną flagę przerwania
     }
     
-    /**
-     * Test 6: Parsowanie JSON z jednym użytkownikiem
-     */
     @Test
     @DisplayName("Powinien poprawnie sparsować JSON z jednym użytkownikiem")
     void shouldParseJsonCorrectly_singleUser() throws Exception {
@@ -528,9 +458,6 @@ class ApiServiceTest {
         assertEquals("CloudInc", employee.getCompanyName());
     }
     
-    /**
-     * Test 7: Parsowanie JSON z niepoprawną strukturą
-     */
     @Test
     @DisplayName("Powinien rzucić ApiException gdy JSON jest niepoprawny")
     void shouldThrowException_whenInvalidJson() throws Exception {
@@ -554,9 +481,6 @@ class ApiServiceTest {
                    exception.getMessage().contains("JSON"));
     }
     
-    /**
-     * Test 8: Parsowanie użytkownika z imieniem składającym się z jednego słowa
-     */
     @Test
     @DisplayName("Powinien obsłużyć imię składające się z jednego słowa")
     void shouldHandleSingleWordName() throws Exception {
@@ -588,9 +512,6 @@ class ApiServiceTest {
         assertEquals("Madonna", employees.get(0).getFullName());
     }
     
-    /**
-     * Test 9: Weryfikacja domyślnych wartości (Position i Salary)
-     */
     @Test
     @DisplayName("Powinien ustawić domyślne wartości dla pozycji i wynagrodzenia")
     void shouldSetDefaultPositionAndSalary() throws Exception {
@@ -614,9 +535,6 @@ class ApiServiceTest {
         }
     }
     
-    /**
-     * Test 10: Pusta odpowiedź JSON (pusta tablica)
-     */
     @Test
     @DisplayName("Powinien obsłużyć pustą tablicę JSON")
     void shouldHandleEmptyJsonArray() throws Exception {
@@ -638,18 +556,6 @@ class ApiServiceTest {
         assertTrue(employees.isEmpty());
     }
     
-    /**
-     * Metoda pomocnicza do tworzenia ApiService z mockowanym HttpClient.
-     * 
-     * UWAGA: Ta metoda wymaga aby ApiService miał konstruktor przyjmujący HttpClient:
-     * 
-     * public ApiService(HttpClient httpClient) {
-     *     this.httpClient = httpClient;
-     *     this.gson = new Gson();
-     * }
-     * 
-     * Alternatywnie można użyć refleksji do wstrzyknięcia mocka.
-     */
     private ApiService createApiServiceWithMockedClient(HttpClient mockClient) {
         try {
             // Próba użycia konstruktora z HttpClient

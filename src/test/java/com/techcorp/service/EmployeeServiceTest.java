@@ -13,10 +13,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Testy jednostkowe dla klasy EmployeeService.
- * Sprawdzają poprawność działania metod zarządzania pracownikami.
- */
 class EmployeeServiceTest {
     
     private EmployeeService employeeService;
@@ -26,9 +22,6 @@ class EmployeeServiceTest {
         employeeService = new EmployeeService();
     }
     
-    /**
-     * Test 1a: Dodawanie pracownika - sprawdzenie rozmiaru
-     */
     @Test
     @DisplayName("Powinien zwiększyć rozmiar listy o 1 gdy dodaje pracownika")
     void shouldIncreaseSize_whenAddingEmployee() {
@@ -48,9 +41,6 @@ class EmployeeServiceTest {
         assertEquals(1, employeeService.size());
     }
     
-    /**
-     * Test 1b: Dodawanie pracownika - sprawdzenie emaila
-     */
     @Test
     @DisplayName("Powinien zachować email pracownika po dodaniu")
     void shouldPreserveEmail_whenAddingEmployee() {
@@ -71,9 +61,6 @@ class EmployeeServiceTest {
         assertEquals("jan@techcorp.com", employees.get(0).getEmail());
     }
     
-    /**
-     * Test 2a: Rzucenie wyjątku przy duplikacie emaila
-     */
     @Test
     @DisplayName("Powinien rzucić wyjątek gdy email już istnieje")
     void shouldThrowException_whenDuplicateEmail() {
@@ -102,9 +89,6 @@ class EmployeeServiceTest {
         );
     }
     
-    /**
-     * Test 2b: Weryfikacja komunikatu przy duplikacie emaila
-     */
     @Test
     @DisplayName("Powinien zawrzeć email w komunikacie błędu duplikatu")
     void shouldContainEmailInMessage_whenDuplicateEmail() {
@@ -136,9 +120,6 @@ class EmployeeServiceTest {
         assertTrue(exception.getMessage().toLowerCase().contains("jan@techcorp.com"));
     }
     
-    /**
-     * Test 2c: Rozmiar listy nie zmienia się przy duplikacie
-     */
     @Test
     @DisplayName("Nie powinien zwiększać rozmiaru listy gdy email jest duplikatem")
     void shouldNotIncreaseSize_whenDuplicateEmail() {
@@ -171,9 +152,6 @@ class EmployeeServiceTest {
         assertEquals(1, employeeService.size());
     }
     
-    /**
-     * Test 3a: Rzucenie wyjątku przy wartości null
-     */
     @Test
     @DisplayName("Powinien rzucić wyjątek gdy pracownik jest null")
     void shouldThrowException_whenNullEmployee() {
@@ -184,9 +162,6 @@ class EmployeeServiceTest {
         );
     }
     
-    /**
-     * Test 3b: Rozmiar listy nie zmienia się przy null
-     */
     @Test
     @DisplayName("Nie powinien zwiększać rozmiaru gdy pracownik jest null")
     void shouldNotIncreaseSize_whenNullEmployee() {
@@ -201,9 +176,6 @@ class EmployeeServiceTest {
         assertEquals(0, employeeService.size());
     }
     
-    /**
-     * Test 4a: Wyszukiwanie po firmie - ilość pracowników
-     */
     @Test
     @DisplayName("Powinien znaleźć właściwą liczbę pracowników dla firmy")
     void shouldFindCorrectCount_whenCompanyExists() {
@@ -225,9 +197,6 @@ class EmployeeServiceTest {
         assertEquals(2, techCorpEmployees.size());
     }
     
-    /**
-     * Test 4b: Wyszukiwanie po firmie - weryfikacja nazwy firmy
-     */
     @Test
     @DisplayName("Powinien zwrócić tylko pracowników z właściwej firmy")
     void shouldReturnOnlyMatchingCompany_whenSearching() {
@@ -249,9 +218,6 @@ class EmployeeServiceTest {
         assertTrue(techCorpEmployees.stream().allMatch(e -> e.getCompanyName().equals("TechCorp")));
     }
     
-    /**
-     * Test 5: Wyszukiwanie po firmie - firma nie istnieje
-     */
     @Test
     @DisplayName("Powinien zwrócić pustą listę gdy firma nie istnieje")
     void shouldReturnEmptyList_whenCompanyNotExists() {
@@ -267,9 +233,6 @@ class EmployeeServiceTest {
         assertTrue(result.isEmpty());
     }
     
-    /**
-     * Test 6a: Średnie wynagrodzenie - obecność wartości
-     */
     @Test
     @DisplayName("Powinien zwrócić niepusty Optional gdy pracownicy istnieją")
     void shouldReturnPresentOptional_whenEmployeesExist() {
@@ -291,9 +254,6 @@ class EmployeeServiceTest {
         assertTrue(average.isPresent());
     }
     
-    /**
-     * Test 6b: Średnie wynagrodzenie - wartość
-     */
     @Test
     @DisplayName("Powinien obliczyć poprawną średnią wynagrodzeń")
     void shouldCalculateCorrectAverage_whenEmployeesExist() {
@@ -315,9 +275,6 @@ class EmployeeServiceTest {
         assertEquals(13333.33, average.getAsDouble(), 0.01);
     }
     
-    /**
-     * Test 7: Średnie wynagrodzenie - brak pracowników
-     */
     @Test
     @DisplayName("Powinien zwrócić pusty Optional gdy brak pracowników dla średniej")
     void shouldReturnEmpty_whenNoEmployeesForAverage() {
@@ -328,9 +285,6 @@ class EmployeeServiceTest {
         assertFalse(average.isPresent());
     }
     
-    /**
-     * Test 8a: Najlepiej zarabiający - obecność wartości
-     */
     @Test
     @DisplayName("Powinien zwrócić niepusty Optional gdy szuka top earner")
     void shouldReturnPresentOptional_whenFindingTopEarner() {
@@ -352,9 +306,6 @@ class EmployeeServiceTest {
         assertTrue(topEarner.isPresent());
     }
     
-    /**
-     * Test 8b: Najlepiej zarabiający - imię
-     */
     @Test
     @DisplayName("Powinien znaleźć pracownika z najwyższą pensją - imię")
     void shouldFindTopEarnerName_whenMultipleEmployees() {
@@ -376,9 +327,6 @@ class EmployeeServiceTest {
         assertEquals("Piotr Wiśniewski", topEarner.get().getFullName());
     }
     
-    /**
-     * Test 8c: Najlepiej zarabiający - wynagrodzenie
-     */
     @Test
     @DisplayName("Powinien znaleźć pracownika z najwyższą pensją - wynagrodzenie")
     void shouldFindTopEarnerSalary_whenMultipleEmployees() {
@@ -400,9 +348,6 @@ class EmployeeServiceTest {
         assertEquals(20000.0, topEarner.get().getSalary());
     }
     
-    /**
-     * Test 9: Najlepiej zarabiający - brak pracowników
-     */
     @Test
     @DisplayName("Powinien zwrócić pusty Optional gdy brak pracowników dla top earner")
     void shouldReturnEmpty_whenNoEmployeesForTopEarner() {
@@ -413,9 +358,6 @@ class EmployeeServiceTest {
         assertFalse(topEarner.isPresent());
     }
     
-    /**
-     * Test 10a: Walidacja wynagrodzeń - ilość niedopłaconych
-     */
     @Test
     @DisplayName("Powinien znaleźć właściwą liczbę niedopłaconych pracowników")
     void shouldFindCorrectCount_whenUnderpaidEmployeesExist() {
@@ -437,9 +379,6 @@ class EmployeeServiceTest {
         assertEquals(2, underpaid.size());
     }
     
-    /**
-     * Test 10b: Walidacja wynagrodzeń - konkretny niedopłacony (1)
-     */
     @Test
     @DisplayName("Powinien znaleźć programistę w liście niedopłaconych")
     void shouldFindProgrammer_whenUnderpaid() {
@@ -461,9 +400,6 @@ class EmployeeServiceTest {
         assertTrue(underpaid.stream().anyMatch(e -> e.getEmail().equals("jan@test.com")));
     }
     
-    /**
-     * Test 10c: Walidacja wynagrodzeń - konkretny niedopłacony (2)
-     */
     @Test
     @DisplayName("Powinien znaleźć prezesa w liście niedopłaconych")
     void shouldFindCEO_whenUnderpaid() {
@@ -485,9 +421,6 @@ class EmployeeServiceTest {
         assertTrue(underpaid.stream().anyMatch(e -> e.getEmail().equals("piotr@test.com")));
     }
     
-    /**
-     * Test 11: Walidacja wynagrodzeń - wszystkie wynagrodzenia poprawne
-     */
     @Test
     @DisplayName("Powinien zwrócić pustą listę gdy wszystkie wynagrodzenia są poprawne")
     void shouldReturnEmptyList_whenAllSalariesValid() {
@@ -506,9 +439,6 @@ class EmployeeServiceTest {
         assertTrue(underpaid.isEmpty());
     }
     
-    /**
-     * Test 12: Sprawdzenie wielkości liter w emailu (case-insensitive)
-     */
     @Test
     @DisplayName("Powinien traktować emaile jako case-insensitive")
     void shouldTreatEmailsAsCaseInsensitive() {
@@ -526,9 +456,6 @@ class EmployeeServiceTest {
         assertThrows(DuplicateEmailException.class, () -> employeeService.addEmployee(employee2));
     }
     
-    /**
-     * Test 13a: Case insensitive search - lowercase
-     */
     @Test
     @DisplayName("Powinien znaleźć firmę małymi literami")
     void shouldFindByCompany_lowercase() {
@@ -544,9 +471,6 @@ class EmployeeServiceTest {
         assertEquals(1, result.size());
     }
     
-    /**
-     * Test 13b: Case insensitive search - uppercase
-     */
     @Test
     @DisplayName("Powinien znaleźć firmę dużymi literami")
     void shouldFindByCompany_uppercase() {
@@ -562,9 +486,6 @@ class EmployeeServiceTest {
         assertEquals(1, result.size());
     }
     
-    /**
-     * Test 13c: Case insensitive search - mixed case
-     */
     @Test
     @DisplayName("Powinien znaleźć firmę mieszanymi literami")
     void shouldFindByCompany_mixedCase() {
@@ -580,9 +501,6 @@ class EmployeeServiceTest {
         assertEquals(1, result.size());
     }
     
-    /**
-     * Test 14: Rzucenie wyjątku przy null w findByCompany
-     */
     @Test
     @DisplayName("Powinien rzucić wyjątek gdy nazwa firmy jest null w findByCompany")
     void shouldThrowException_whenCompanyNameIsNull() {
