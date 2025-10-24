@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'application'
     id 'jacoco'
+    id 'eclipse'
+    id 'idea'
 }
 
 group = 'com.techcorp'
