@@ -1,5 +1,7 @@
 package com.techcorp.service;
 
+import org.springframework.stereotype.Service;
+
 import com.techcorp.model.CompanyStatistics;
 import com.techcorp.model.Employee;
 import com.techcorp.model.Position;
@@ -9,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class EmployeeService {
     private final Map<String, Employee> employees = new LinkedHashMap<>();
 

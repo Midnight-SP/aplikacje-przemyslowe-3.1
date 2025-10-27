@@ -8,6 +8,9 @@ import com.google.gson.JsonSyntaxException;
 import com.techcorp.model.Employee;
 import com.techcorp.model.Position;
 import com.techcorp.exception.ApiException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,21 +20,26 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ApiService {
     private final HttpClient httpClient;
     private final Gson gson;
-    
-    public ApiService() {
-        this.httpClient = HttpClient.newHttpClient();
-        this.gson = new Gson();
-    }
-    
-    /**
-     * Konstruktor dla testów - umożliwia wstrzyknięcie mockowanego HttpClient
-     */
-    public ApiService(HttpClient httpClient) {
+
+    @Value("${app.api.url:}")
+    private String defaultApiUrl;
+
+    @Autowired
+    public ApiService(HttpClient httpClient, Gson gson) {
         this.httpClient = httpClient;
-        this.gson = new Gson();
+        this.gson = gson;
+    }
+
+    public ApiService() {
+        this(HttpClient.newHttpClient(), new Gson());
+    }
+
+    public ApiService(HttpClient httpClient) {
+        this(httpClient, new Gson());
     }
     
     public List<Employee> fetchEmployeesFromApi(String apiUrl) throws ApiException {
@@ -58,6 +66,13 @@ public class ApiService {
         } catch (JsonSyntaxException e) {
             throw new ApiException("Błąd parsowania JSON: " + e.getMessage(), e);
         }
+    }
+
+    public List<Employee> fetchEmployeesFromApi() throws ApiException {
+        if (defaultApiUrl == null || defaultApiUrl.isBlank()) {
+            throw new ApiException("Brak skonfigurowanego app.api.url w application.properties");
+        }
+        return fetchEmployeesFromApi(defaultApiUrl);
     }
     
     private List<Employee> parseJsonResponse(String jsonResponse) throws ApiException {

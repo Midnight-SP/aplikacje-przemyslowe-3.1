@@ -3,13 +3,17 @@ package com.techcorp.service;
 import com.techcorp.model.Employee;
 import com.techcorp.model.ImportSummary;
 import com.techcorp.model.Position;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ImportService {
     private final EmployeeService employeeService;
     
@@ -22,7 +26,7 @@ public class ImportService {
         int importedCount = 0;
         int lineNumber = 0;
         
-        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+    try (BufferedReader reader = Files.newBufferedReader(Path.of(filepath), StandardCharsets.UTF_8)) {
             String line;
             
             reader.readLine();

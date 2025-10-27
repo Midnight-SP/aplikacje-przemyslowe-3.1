@@ -77,3 +77,7 @@ tasks.register('runAnalyticsDemo', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'com.techcorp.AnalyticsDemo'
 }
+
+tasks.named('bootRun') {
+    jvmArgs = ['-Dfile.encoding=UTF-8']
+}
