@@ -8,6 +8,7 @@ public class Employee {
     private String companyName;
     private Position position;
     private double salary;
+    private EmploymentStatus status;
 
     public Employee(String fullName, String email, String companyName, Position position, double salary) {
         this.fullName = Objects.requireNonNull(fullName, "fullName");
@@ -18,6 +19,7 @@ public class Employee {
             throw new IllegalArgumentException("Salary cannot be negative");
         }
         this.salary = salary;
+        this.status = EmploymentStatus.ACTIVE;
     }
 
     public String getFullName() {
@@ -59,6 +61,14 @@ public class Employee {
         this.salary = salary;
     }
 
+    public EmploymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EmploymentStatus status) {
+        this.status = Objects.requireNonNull(status, "status");
+    }
+
     public String getLastName() {
         String[] parts = fullName.trim().split("\\s+");
         return parts.length == 0 ? fullName : parts[parts.length - 1];
@@ -85,6 +95,7 @@ public class Employee {
                 ", companyName='" + companyName + '\'' +
                 ", position=" + position +
                 ", salary=" + salary +
+                ", status=" + status +
                 '}';
     }
 }

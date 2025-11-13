@@ -1,15 +1,24 @@
 package com.techcorp.service;
 
-import org.springframework.stereotype.Service;
-
-import com.techcorp.model.CompanyStatistics;
-import com.techcorp.model.Employee;
-import com.techcorp.model.Position;
-import com.techcorp.exception.DuplicateEmailException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
+
+import com.techcorp.exception.DuplicateEmailException;
+import com.techcorp.exception.EmployeeNotFoundException;
+import com.techcorp.model.CompanyStatistics;
+import com.techcorp.model.Employee;
+import com.techcorp.model.EmploymentStatus;
+import com.techcorp.model.Position;
 
 @Service
 public class EmployeeService {
@@ -91,6 +100,53 @@ public class EmployeeService {
                         }
                     )
                 ));
+    }
+
+    public Optional<Employee> findByEmail(String email) {
+        Objects.requireNonNull(email, "email");
+        return Optional.ofNullable(employees.get(email.toLowerCase()));
+    }
+
+    public Employee getByEmail(String email) {
+        return findByEmail(email)
+                .orElseThrow(() -> new EmployeeNotFoundException(email));
+    }
+
+    public void updateEmployee(String email, Employee updatedEmployee) {
+        getByEmail(email);
+        String key = email.toLowerCase();
+        
+        if (!email.equalsIgnoreCase(updatedEmployee.getEmail())) {
+            String newKey = updatedEmployee.getEmail().toLowerCase();
+            if (employees.containsKey(newKey)) {
+                throw new DuplicateEmailException(updatedEmployee.getEmail());
+            }
+            employees.remove(key);
+            employees.put(newKey, updatedEmployee);
+        } else {
+            employees.put(key, updatedEmployee);
+        }
+    }
+
+    public void deleteEmployee(String email) {
+        getByEmail(email);
+        employees.remove(email.toLowerCase());
+    }
+
+    public void updateEmployeeStatus(String email, EmploymentStatus status) {
+        Employee employee = getByEmail(email);
+        employee.setStatus(status);
+    }
+
+    public List<Employee> findByStatus(EmploymentStatus status) {
+        Objects.requireNonNull(status, "status");
+        return stream()
+                .filter(e -> e.getStatus() == status)
+                .collect(Collectors.toList());
+    }
+
+    public Map<EmploymentStatus, Long> countByStatus() {
+        return stream().collect(Collectors.groupingBy(Employee::getStatus, Collectors.counting()));
     }
 
     private Stream<Employee> stream() {
