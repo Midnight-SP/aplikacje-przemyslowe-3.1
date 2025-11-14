@@ -22,8 +22,12 @@ import com.techcorp.model.Employee;
 import com.techcorp.model.EmploymentStatus;
 import com.techcorp.model.Position;
 import com.techcorp.service.EmployeeService;
+import com.techcorp.service.ImportService;
+import com.techcorp.service.ApiService;
+import org.springframework.test.context.ActiveProfiles;
 
 @WebMvcTest(controllers = StatisticsController.class)
+@ActiveProfiles("test")
 class StatisticsControllerTest {
 
     @Autowired
@@ -31,6 +35,15 @@ class StatisticsControllerTest {
 
     @MockBean
     private EmployeeService employeeService;
+
+    @MockBean
+    private ImportService importService;
+
+    @MockBean
+    private ApiService apiService;
+
+    @MockBean(name = "xmlEmployees")
+    private List<Employee> xmlEmployees;
 
     @Test
     void shouldGetAverageSalary() throws Exception {

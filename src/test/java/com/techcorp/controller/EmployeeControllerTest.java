@@ -37,8 +37,18 @@ import com.techcorp.model.Employee;
 import com.techcorp.model.EmploymentStatus;
 import com.techcorp.model.Position;
 import com.techcorp.service.EmployeeService;
+import com.techcorp.service.ImportService;
+import com.techcorp.service.ApiService;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 
 @WebMvcTest(controllers = EmployeeController.class)
+@ActiveProfiles("test")
+@TestPropertySource(properties = {
+    "spring.main.lazy-initialization=true",
+    "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+})
 class EmployeeControllerTest {
 
     @Autowired
@@ -49,6 +59,15 @@ class EmployeeControllerTest {
 
     @MockBean
     private EmployeeService employeeService;
+
+    @MockBean
+    private ImportService importService;
+
+    @MockBean
+    private ApiService apiService;
+
+    @MockBean(name = "xmlEmployees")
+    private List<Employee> xmlEmployees;
 
     @Test
     void shouldGetAllEmployees() throws Exception {

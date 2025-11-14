@@ -809,6 +809,10 @@ src/
 - Odczyt: `new UrlResource(filePath.toUri())`
 - Testy: `MockMultipartFile`, metoda `multipart()` w MockMvc
 
+### Uwaga
+
+Nie używaj zmiennej **BAOS**
+
 ### Przykłady testowania
 
 ```bash
