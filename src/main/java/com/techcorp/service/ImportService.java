@@ -53,6 +53,66 @@ public class ImportService {
         
         return new ImportSummary(importedCount, errors);
     }
+
+    public ImportSummary importFromXml(String filepath) {
+        List<String> errors = new ArrayList<>();
+        int importedCount = 0;
+        try {
+            java.nio.file.Path path = Path.of(filepath);
+            javax.xml.parsers.DocumentBuilderFactory dbFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+            javax.xml.parsers.DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            org.w3c.dom.Document doc = dBuilder.parse(path.toFile());
+            doc.getDocumentElement().normalize();
+
+            org.w3c.dom.NodeList nodes = doc.getElementsByTagName("employee");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                org.w3c.dom.Node node = nodes.item(i);
+                int nodeLine = i + 1;
+                if (node.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
+                    org.w3c.dom.Element elem = (org.w3c.dom.Element) node;
+                    try {
+                        String firstName = getTagValue(elem, "firstName");
+                        String lastName = getTagValue(elem, "lastName");
+                        String email = getTagValue(elem, "email");
+                        String company = getTagValue(elem, "company");
+                        String positionStr = getTagValue(elem, "position");
+                        String salaryStr = getTagValue(elem, "salary");
+
+                        Position position;
+                        try {
+                            position = Position.valueOf(positionStr.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            throw new IllegalArgumentException("Nieprawidłowe stanowisko: " + positionStr);
+                        }
+
+                        double salary;
+                        try {
+                            salary = Double.parseDouble(salaryStr);
+                            if (salary <= 0) throw new IllegalArgumentException("Wynagrodzenie musi być dodatnie");
+                        } catch (NumberFormatException e) {
+                            throw new IllegalArgumentException("Nieprawidłowy format wynagrodzenia: " + salaryStr);
+                        }
+
+                        String fullName = firstName + " " + lastName;
+                        Employee employee = new Employee(fullName, email, company, position, salary);
+                        employeeService.addEmployee(employee);
+                        importedCount++;
+                    } catch (Exception ex) {
+                        errors.add("Element " + nodeLine + ": " + ex.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            errors.add("Błąd odczytu pliku XML: " + e.getMessage());
+        }
+        return new ImportSummary(importedCount, errors);
+    }
+
+    private String getTagValue(org.w3c.dom.Element elem, String tag) {
+        org.w3c.dom.NodeList nl = elem.getElementsByTagName(tag);
+        if (nl.getLength() == 0) return "";
+        return nl.item(0).getTextContent().trim();
+    }
     
     private Employee parseCsvLine(String line, int lineNumber) {
         String[] fields = line.split(",");

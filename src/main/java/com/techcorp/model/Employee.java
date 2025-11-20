@@ -8,6 +8,7 @@ public class Employee {
     private String companyName;
     private Position position;
     private double salary;
+    private String photoFileName;
     private EmploymentStatus status;
 
     public Employee(String fullName, String email, String companyName, Position position, double salary) {
@@ -69,6 +70,14 @@ public class Employee {
         this.status = Objects.requireNonNull(status, "status");
     }
 
+    public String getPhotoFileName() {
+        return photoFileName;
+    }
+
+    public void setPhotoFileName(String photoFileName) {
+        this.photoFileName = photoFileName;
+    }
+
     public String getLastName() {
         String[] parts = fullName.trim().split("\\s+");
         return parts.length == 0 ? fullName : parts[parts.length - 1];
@@ -96,6 +105,7 @@ public class Employee {
                 ", position=" + position +
                 ", salary=" + salary +
                 ", status=" + status +
+                ", photoFileName='" + photoFileName + '\'' +
                 '}';
     }
 }
